@@ -23,22 +23,3 @@ lazy val root = (project in file("."))
       "org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full,
     ),
   )
-
-// TODO: we want to move these into chryse itself, to be imported into projects that use it.
-// Same for cxxsim stuff.
-lazy val ice40 = inputKey[Unit]("Elaborate and synthesise for ice40")
-ice40 := {
-  (Compile / run).evaluated
-  if (("make ice40" !) != 0) {
-    throw new IllegalStateException("ice40 failed to synthesise")
-  }
-}
-
-lazy val ice40prog =
-  inputKey[Unit]("Elaborate, synthesise for ice40, and program the board")
-ice40prog := {
-  (Compile / run).evaluated
-  if (("make ice40-prog" !) != 0) {
-    throw new IllegalStateException("ice40 failed to synthesise")
-  }
-}
