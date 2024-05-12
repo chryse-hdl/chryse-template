@@ -17,6 +17,7 @@ jobs:
       uses: chryse-hdl/setup-chryse-action@main
       with:
         install-oss-cad-suite: true
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Checkout repo
       uses: actions/checkout@v4
