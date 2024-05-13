@@ -3,8 +3,8 @@ package com.example.newproject
 import _root_.circt.stage.ChiselStage
 import chisel3._
 import chisel3.util._
+import ee.hrzn.chryse.ChryseApp
 import ee.hrzn.chryse.HasIO
-import ee.hrzn.chryse.platform.ElaboratablePlatform
 import ee.hrzn.chryse.platform.Platform
 import ee.hrzn.chryse.platform.ice40.ICE40Platform
 
@@ -34,21 +34,9 @@ class Top(implicit platform: Platform) extends Module with HasIO[TopIO] {
   io.ledg := false.B
 }
 
-object Top extends App {
-  def apply()(implicit platform: ElaboratablePlatform) =
-    platform(new Top)
+object Top extends ChryseApp {
+  override val name            = "newproject"
+  override val targetPlatforms = Seq(ICE40Platform())
 
-  implicit private val platform: ElaboratablePlatform = ICE40Platform
-  private val firtoolOpts = Array(
-    "--lowering-options=disallowLocalVariables",
-    "-disable-all-randomization",
-    "-strip-debug-info",
-  )
-  val verilog =
-    ChiselStage.emitSystemVerilog(Top(), firtoolOpts = firtoolOpts)
-  new PrintWriter(s"Top-${platform.id}.sv", "utf-8") {
-    try
-      write(verilog)
-    finally close()
-  }
+  override def genTop(implicit platform: Platform) = new Top()
 }
