@@ -6,6 +6,7 @@ import chisel3.util._
 import ee.hrzn.chryse.ChryseApp
 import ee.hrzn.chryse.HasIO
 import ee.hrzn.chryse.platform.Platform
+import ee.hrzn.chryse.platform.cxxrtl.CXXRTLOptions
 import ee.hrzn.chryse.platform.ice40.ICE40Platform
 
 import java.io.PrintWriter
@@ -37,6 +38,7 @@ class Top(implicit platform: Platform) extends Module with HasIO[TopIO] {
 object Top extends ChryseApp {
   override val name            = "newproject"
   override val targetPlatforms = Seq(ICE40Platform())
+  override val cxxrtlOptions   = Some(CXXRTLOptions(clockHz = 3_000_000))
 
   override def genTop(implicit platform: Platform) = new Top()
 }
