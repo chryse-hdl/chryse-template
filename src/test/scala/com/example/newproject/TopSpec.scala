@@ -7,22 +7,28 @@ import ee.hrzn.chryse.platform.Platform
 import org.scalatest.flatspec.AnyFlatSpec
 
 class TopSpec extends AnyFlatSpec with ChiselScalatestTester {
-  behavior.of("Top")
+  behavior.of("Blinker")
 
-  implicit private val platform: Platform = new Platform {
+  implicit val plat: Platform = new Platform {
     val id      = "topspec"
     val clockHz = 8
   }
 
   it should "blink the light" in {
-    test(new Top()).withAnnotations(Seq(WriteVcdAnnotation)) { c =>
-      // ledg is always false (on).
-      // ledr starts true (off) for 1/4 duty, then toggles evenly at 1/2 duty.
-      for { ledr <- Seq(1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1) } {
-        c.io.ledg.expect(false.B)
-        c.io.ledr.expect((ledr == 1).B)
-        c.clock.step()
+    test(new Blinker)
+      .withAnnotations(Seq(WriteVcdAnnotation)) { c =>
+        // ledr should be low or high according to 'expected', where each
+        // element represents 1/4th of a second. ledg should always be high.
+        //
+        // This mirrors the cxxsim test.
+        for {
+          ledr <- Seq(0, 1, 1, 0, 0, 1, 1, 0)
+          _    <- 0 until (plat.clockHz / 4)
+        } {
+          c.io.ledr.expect((ledr == 1).B)
+          c.io.ledg.expect(true.B)
+          c.clock.step()
+        }
       }
-    }
   }
 }

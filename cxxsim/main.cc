@@ -1,4 +1,4 @@
-#include <csignal>
+#include <cassert>
 #include <fstream>
 #include <iostream>
 
@@ -6,7 +6,7 @@
 #include <newproject.h>
 
 int main(int argc, char **argv) {
-  cxxrtl_design::p_top top;
+  cxxrtl_design::p_chrysetop top;
   debug_items di;
   top.debug_info(&di, nullptr, "top ");
 
@@ -15,6 +15,7 @@ int main(int argc, char **argv) {
   uint64_t vcd_time = 0;
   if (do_vcd)
     vcd.add(di);
+
   top.p_reset.set(true);
   top.p_clock.set(true);
   top.step();
@@ -23,6 +24,26 @@ int main(int argc, char **argv) {
   top.step();
   vcd.sample(vcd_time++);
   top.p_reset.set(false);
+
+  // ledr should be low or high according to 'expected', where each element
+  // represents 1/4th of a second. ledg should always be high.
+  //
+  // This mirrors the TopSpec test in Scala.
+  std::vector<int> expected = {0, 1, 1, 0, 0, 1, 1, 0};
+  for (auto ledr : expected) {
+    for (int i = 0; i < (CLOCK_HZ / 4); ++i) {
+      assert(top.p_io__ledr.get<int>() == ledr);
+      assert(top.p_io__ledg);
+
+      top.p_clock.set(true);
+      top.step();
+      vcd.sample(vcd_time++);
+      top.p_clock.set(false);
+      top.step();
+      vcd.sample(vcd_time++);
+      top.p_reset.set(false);
+    }
+  }
 
   std::cout << "finished on cycle " << (vcd_time >> 1) << std::endl;
 
