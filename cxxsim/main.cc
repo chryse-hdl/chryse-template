@@ -6,7 +6,7 @@
 #include <newproject.h>
 
 int main(int argc, char **argv) {
-  cxxrtl_design::p_chrysetop top;
+  cxxrtl_design::p_newproject top;
   debug_items di;
   top.debug_info(&di, nullptr, "top ");
 
