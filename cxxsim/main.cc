@@ -41,7 +41,6 @@ int main(int argc, char **argv) {
       top.p_clock.set(false);
       top.step();
       vcd.sample(vcd_time++);
-      top.p_reset.set(false);
     }
   }
 
