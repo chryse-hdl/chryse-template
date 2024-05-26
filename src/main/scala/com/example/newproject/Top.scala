@@ -53,5 +53,9 @@ object Top extends ChryseApp {
   override val name                                  = "newproject"
   override def genTop()(implicit platform: Platform) = new Top
   override val targetPlatforms                       = Seq(IceBreakerPlatform())
-  override val cxxrtlOptions                         = Some(CXXRTLOptions(clockHz = 3_000_000))
+  override val cxxrtlOptions = Some(
+    CXXRTLOptions(
+      platforms = Seq(new CXXRTLPlatform(id = "cxxrtl", clockHz = 3_000_000) {}),
+    ),
+  )
 }
