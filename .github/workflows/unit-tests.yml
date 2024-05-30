@@ -13,11 +13,11 @@ jobs:
   unit-tests:
     runs-on: ubuntu-24.04
     steps:
-    - name: Set up Chryse
-      uses: chryse-hdl/setup-chryse-action@v4
-
     - name: Checkout repo
       uses: actions/checkout@v4
+
+    - name: Set up Chryse
+      uses: chryse-hdl/setup-chryse-action@v2.1
 
     - name: Run tests
       run: sbt test

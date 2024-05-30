@@ -13,14 +13,14 @@ jobs:
   cxxsim-tests:
     runs-on: ubuntu-24.04
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
     - name: Set up Chryse
-      uses: chryse-hdl/setup-chryse-action@v4
+      uses: chryse-hdl/setup-chryse-action@v2.1
       with:
         install-oss-cad-suite: true
         github-token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Checkout repo
-      uses: actions/checkout@v4
 
     - name: Elaborate and run cxxsim
       run: sbt 'run cxxsim'
