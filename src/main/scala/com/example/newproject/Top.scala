@@ -7,6 +7,8 @@ import ee.hrzn.chryse.ChryseApp
 import ee.hrzn.chryse.platform.Platform
 import ee.hrzn.chryse.platform.cxxrtl.CXXRTLOptions
 import ee.hrzn.chryse.platform.cxxrtl.CXXRTLPlatform
+import ee.hrzn.chryse.platform.ecp5.LFE5U_45F
+import ee.hrzn.chryse.platform.ecp5.ULX3SPlatform
 import ee.hrzn.chryse.platform.ice40.IceBreakerPlatform
 
 class Top(implicit platform: Platform) extends Module {
@@ -18,9 +20,15 @@ class Top(implicit platform: Platform) extends Module {
     case plat: IceBreakerPlatform =>
       plat.resources.ledr := blinker.io.ledr
       plat.resources.ledg := blinker.io.ledg
+
+    case plat: ULX3SPlatform =>
+      plat.resources.leds(0) := blinker.io.ledr
+      plat.resources.leds(1) := blinker.io.ledg
+
     case plat: CXXRTLPlatform =>
       val io = IO(new BlinkerIO)
       io :<>= blinker.io
+
     case _ =>
   }
 }
@@ -52,10 +60,11 @@ class Blinker(implicit platform: Platform) extends Module {
 object Top extends ChryseApp {
   override val name                                  = "newproject"
   override def genTop()(implicit platform: Platform) = new Top
-  override val targetPlatforms                       = Seq(IceBreakerPlatform())
+  override val targetPlatforms =
+    Seq(IceBreakerPlatform(), ULX3SPlatform(LFE5U_45F))
   override val cxxrtlOptions = Some(
     CXXRTLOptions(
-      platforms = Seq(new CXXRTLPlatform(id = "cxxrtl", clockHz = 3_000_000) {}),
+      platforms = Seq(new CXXRTLPlatform("cxxrtl") { val clockHz = 3_000_000 }),
     ),
   )
 }
