@@ -1,6 +1,5 @@
 package com.example.newproject
 
-import _root_.circt.stage.ChiselStage
 import chisel3._
 import chisel3.util._
 import ee.hrzn.chryse.ChryseApp

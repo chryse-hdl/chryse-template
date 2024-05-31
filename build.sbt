@@ -1,6 +1,9 @@
-ThisBuild / scalaVersion := "2.13.12"
-ThisBuild / version      := "0.1.0"
-ThisBuild / organization := "com.example"
+ThisBuild / scalaVersion         := "2.13.12"
+ThisBuild / version              := "0.1.0-SNAPSHOT"
+ThisBuild / versionScheme        := Some("early-semver")
+ThisBuild / homepage             := Some(url("https://example.com/newproject"))
+ThisBuild / organization         := "com.example"
+ThisBuild / organizationHomepage := Some(url("https://example.com"))
 
 val chiselVersion = "6.3.0"
 
@@ -14,7 +17,7 @@ lazy val root = (project in file("."))
     ),
     scalacOptions ++= Seq(
       "-language:reflectiveCalls", "-deprecation", "-feature", "-Xcheckinit",
-      "-Ymacro-annotations", "-Wunused",
+      "-Ymacro-annotations", "-Xlint",
     ),
     addCompilerPlugin(
       "org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full,
