@@ -5,7 +5,7 @@ ThisBuild / homepage             := Some(url("https://example.com/newproject"))
 ThisBuild / organization         := "com.example"
 ThisBuild / organizationHomepage := Some(url("https://example.com"))
 
-val chiselVersion = "6.3.0"
+val chiselVersion = "6.4.0"
 
 lazy val root = (project in file("."))
   .settings(
