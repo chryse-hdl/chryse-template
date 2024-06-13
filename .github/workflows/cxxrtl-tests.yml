@@ -1,4 +1,4 @@
-name: cxxsim tests
+name: cxxrtl tests
 
 on:
   push:
@@ -10,18 +10,18 @@ permissions:
   contents: read
 
 jobs:
-  cxxsim-tests:
+  cxxrtl-tests:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
 
     - name: Set up Chryse
-      uses: chryse-hdl/setup-chryse-action@v2.3
+      uses: chryse-hdl/setup-chryse@v2
       with:
         source-ref: main
         install-oss-cad-suite: true
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Elaborate and run cxxsim
-      run: sbt 'run cxxsim'
+    - name: Elaborate and run cxxrtl
+      run: sbt 'run cxxrtl'

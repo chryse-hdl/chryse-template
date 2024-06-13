@@ -25,7 +25,7 @@ class TopSpec extends AnyFlatSpec {
 
       for {
         ledr <- Seq(0, 1, 1, 0, 0, 1, 1, 0)
-        _    <- 0 until (plat.clockHz / 4)
+        _    <- 0 until (plat.clockHz / 4).toInt
       } {
         c.io.ledr.expect((ledr == 1).B)
         c.io.ledg.expect(true.B)
